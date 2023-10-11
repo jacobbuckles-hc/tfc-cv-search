@@ -9,9 +9,13 @@ output "ec2s" {
   value = join(", ", data.aws_instances.all.ids)
 }
 
+output "ec2_other" {
+  value = join(", ", [for ec2 in data.aws_instance.all: ec2.id])
+}
+
 locals {
-        unknown_ec2 = [for ec2 in data.aws_instance.all : ec2 if lookup(ec2.tags, "ManagedBy", "") != "Terraform"]
-    }
+        unknown_ec2 = [for ec2 in data.aws_instance.all : ec2.id if lookup(ec2.tags, "ManagedBy", "") != "Terraform"]
+}
 
 check "ec2_count_check" {
 
