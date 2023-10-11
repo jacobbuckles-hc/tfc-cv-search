@@ -18,7 +18,7 @@ locals {
 }
 
 output "ec2_unknown" {
-  value = join(", ", [for ec2 in unknown_ec2: ec2.id])
+  value = join(", ", local.unknown_ec2)
 }
 
 check "ec2_count_check" {
