@@ -20,7 +20,7 @@ provider "hcp" {}
 
 locals {
   tags = {
-    Name = "My Demo App CV"
+    Name = "My Demo App CV Check"
     ManagedBy = "Terraform"
   }
 }
