@@ -1,4 +1,12 @@
 terraform {
+
+  cloud {
+    organization = "jacobbuckles-org"
+    workspaces {
+      name = "tfc-cv-search"
+    }
+  }
+
   required_providers {
     hcp = {
       source  = "hashicorp/hcp"
@@ -13,7 +21,7 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-2"
+  region = "us-west-2"
 }
 
 provider "hcp" {}
