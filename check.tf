@@ -21,6 +21,6 @@ check "ec2_count_check" {
 
     assert {
       condition = length(local.unknown_ec2) > 0
-      error_message = "Unknown Ec2 instance found: ${local.unknown_ec2[0].id}"
+      error_message = "Unknown Ec2 instance found: ${local.unknown_ec2[0]}"
     }
 }
