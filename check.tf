@@ -5,6 +5,10 @@ data "aws_instance" "all" {
   instance_id = each.key
 }
 
+output "ec2s" {
+  value = join(", ", data.aws_instances.all.ids)
+}
+
 locals {
         unknown_ec2 = [for ec2 in data.aws_instance.all : ec2 if lookup(ec2.tags, "ManagedBy", "") != "Terraform"]
     }
