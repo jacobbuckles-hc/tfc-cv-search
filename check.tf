@@ -1,8 +1,8 @@
 data "aws_instances" "all" {}
 
 data "aws_instance" "all" {
-  for_each = data.aws_instances.all
-  instance_id = each.value.id
+  for_each = toset([for ec2 in data.aws_instances.all : ec2.id])
+  instance_id = each.key
 }
 
 locals {
