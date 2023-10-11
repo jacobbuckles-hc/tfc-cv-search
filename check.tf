@@ -1,7 +1,7 @@
 data "aws_instances" "all" {}
 
 data "aws_instance" "all" {
-  for_each = toset([for ec2 in data.aws_instances.all : ec2.id])
+  for_each = toset(data.aws_instances.all.ids)
   instance_id = each.key
 }
 
