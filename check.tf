@@ -9,7 +9,7 @@ locals {
         unknown_ec2 = [for ec2 in data.aws_instance.all : ec2.id if lookup(ec2.tags, "ManagedBy", "") != "Terraform"]
 }
 
-check "ec2_count_check" {
+check "unknown_ec2" {
 
     assert {
       condition = length(local.unknown_ec2) == 0

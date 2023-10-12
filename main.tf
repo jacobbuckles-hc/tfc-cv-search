@@ -8,10 +8,6 @@ terraform {
   }
 
   required_providers {
-    hcp = {
-      source  = "hashicorp/hcp"
-      version = "0.23.1"
-    }
     aws = {
       source  = "hashicorp/aws"
       version = "~> 4.42.0"
@@ -23,8 +19,6 @@ terraform {
 provider "aws" {
   region = "us-west-2"
 }
-
-provider "hcp" {}
 
 locals {
   tags = {
@@ -42,20 +36,24 @@ module "vpc" {
   tags = local.tags
 }
 
-data "hcp_packer_iteration" "ubuntu" {
-  bucket_name = "packer-demo"
-  channel     = "development"
-}
+data "aws_ami" "ubuntu" {
+  most_recent = true
 
-data "hcp_packer_image" "ubuntu_us_east_2" {
-  bucket_name    = "packer-demo"
-  cloud_provider = "aws"
-  iteration_id   = data.hcp_packer_iteration.ubuntu.ulid
-  region         = "us-east-2"
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-*20*-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
 }
 
 resource "aws_instance" "web" {
-  ami                         = data.hcp_packer_image.ubuntu_us_east_2.cloud_image_id
+  ami                         = data.aws_ami.ubuntu.id
   instance_type               = "t2.micro"
   subnet_id                   = module.vpc.subnet_id
   vpc_security_group_ids      = [module.vpc.vpc_security_group_id]
@@ -63,3 +61,5 @@ resource "aws_instance" "web" {
 
   tags = local.tags
 }
+
+
